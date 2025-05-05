@@ -23,6 +23,8 @@ export function UserNav({ user }) {
   const router = useRouter()
   const { toast } = useToast()
 
+  console.log("user", user)
+
   const handleLogout = async () => {
     setIsLoggingOut(true)
 
@@ -65,9 +67,13 @@ export function UserNav({ user }) {
       </div>
     )
   }
+  function getInitials(fullName: any) {
+    const parts = fullName.trim().split(' ');
+    if (parts.length === 0) return '';
+    return parts.slice(0, 2).map(p => p[0].toUpperCase()).join('');
+  }
 
-  const initials = `${user.firstName?.[0] || ""}${user.lastName?.[0] || ""}`.toUpperCase()
-
+  const initials = getInitials(user.name)
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -80,7 +86,7 @@ export function UserNav({ user }) {
       <DropdownMenuContent className="w-56" align="end">
         <DropdownMenuLabel>
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium">{`${user.firstName} ${user.lastName}`}</p>
+            <p className="text-sm font-medium">{`${user.name}`}</p>
             <p className="text-xs text-gray-500 truncate">{user.email}</p>
           </div>
         </DropdownMenuLabel>

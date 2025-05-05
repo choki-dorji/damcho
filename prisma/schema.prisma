@@ -26,6 +26,7 @@ model User {
   sessions      Session[]
   carePlans     CarePlan[]
   savedFaqs     SavedFaq[]
+  surveys       Survey[]
 }
 
 model Account {
@@ -76,4 +77,36 @@ model SavedFaq {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId]) // Add an index for faster querying by user
+}
+
+model Survey {
+  id                  String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId              String   @db.ObjectId
+  user                User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  firstName           String?
+  lastName            String?
+  email               String
+  dateOfBirth         DateTime?
+  gender              String?
+  typeOfCancer        String?
+  dateOfDiagnosis     DateTime?
+  dateTreatmentEnded  DateTime?
+  treatmentsReceived  String[] // e.g., ["Surgery", "Chemotherapy"]
+  otherTreatments     String?
+  physicalHealth      String?  // e.g., "Excellent", "Good", etc.
+  symptoms            String[] // e.g., ["Fatigue", "Pain"]
+  physicalActivity    String?  // e.g., "Daily", "2-3 times per week"
+  physicalConcerns    String?
+  emotionalWellbeing  String?  // e.g., "Excellent", "Good", etc.
+  emotionalSymptoms   String[] // e.g., ["Anxiety", "Depression"]
+  supportSystem       String?  // e.g., "Yes, strong support system"
+  emotionalConcerns   String?
+  diet                String?  // e.g., "Balanced and healthy"
+  sleepQuality        String?  // e.g., "Excellent", "Good", etc.
+  recoveryGoals        String[] // e.g., ["Regain Physical Strength", "Improve Sleep"]
+  additionalInfo      String?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  @@index([userId])
 } 

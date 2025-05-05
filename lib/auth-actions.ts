@@ -63,3 +63,12 @@ export async function handleLogout() {
   cookieStore.delete('user_id')
   redirect('/auth/login')
 } 
+
+export function getCookieValue(name: string) {
+  const cookies = document.cookie.split(';');
+  for (let cookie of cookies) {
+    const [key, value] = cookie.trim().split('=');
+    if (key === name) return decodeURIComponent(value);
+  }
+  return null;
+}

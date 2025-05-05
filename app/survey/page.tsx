@@ -37,13 +37,13 @@ interface SurveyData {
   emotionalWellbeing: {
     mood: string
     supportSystem: string
-    concerns: string
+    concerns: string | any
   }
   lifestyleGoals: {
-    exercise: string
-    diet: string
-    sleep: string
-    goals: string
+    exercise: string | any
+    diet: string | any
+    sleep: string | any
+    goals: string | any
   }
 }
 
@@ -125,6 +125,8 @@ export default function SurveyPage() {
     fetchUserData()
   }, [router])
 
+  const userId = getAuthData()?.id
+  console.log(userId)
   const handleNext = async () => {
     if (currentStep < totalSteps) {
       setCurrentStep(currentStep + 1)
@@ -132,16 +134,20 @@ export default function SurveyPage() {
     } else {
       try {
         // Submit survey data
-        const response = await fetch('/api/care-plan', {
+        const flatSurveyData = {
+          ...flattenSurveyData(surveyData),
+          userId: userId // <-- Add this line
+        }
+        const response = await fetch('/api/survey', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(surveyData),
+          body: JSON.stringify(flatSurveyData),
         })
 
         if (!response.ok) {
-          throw new Error('Failed to save care plan')
+          throw new Error('Failed to save survey')
         }
 
         // Redirect to dashboard
@@ -182,6 +188,33 @@ export default function SurveyPage() {
       }
       return newData
     })
+  }
+
+  const isStepValid = (step: number, surveyData: SurveyData): boolean => {
+    switch (step) {
+      case 1:
+        return (
+          surveyData.personalInfo.firstName.trim() !== '' &&
+          surveyData.personalInfo.lastName.trim() !== '' &&
+          surveyData.personalInfo.email.trim() !== '' &&
+          surveyData.personalInfo.dob.trim() !== '' &&
+          surveyData.personalInfo.gender.trim() !== ''
+        )
+      case 2:
+        return (
+          surveyData.treatmentHistory.cancerType.trim() !== '' &&
+          surveyData.treatmentHistory.diagnosisDate.trim() !== '' &&
+          surveyData.treatmentHistory.treatmentEndDate.trim() !== ''
+        )
+      case 3:
+        return true
+      case 4:
+        return true
+      case 5:
+        return true
+      default:
+        return false
+    }
   }
 
   if (loading) {
@@ -240,7 +273,11 @@ export default function SurveyPage() {
               <ArrowLeft className="mr-2 h-4 w-4" /> Back
             </Button>
 
-            <Button onClick={handleNext} className="bg-forest-green hover:bg-forest-green/90 text-white">
+            <Button
+              onClick={handleNext}
+              className="bg-forest-green hover:bg-forest-green/90 text-white"
+              disabled={!isStepValid(currentStep, surveyData)}
+            >
               {currentStep === totalSteps ? "Complete Survey" : "Next"}
               {currentStep !== totalSteps && <ArrowRight className="ml-2 h-4 w-4" />}
             </Button>
@@ -362,13 +399,26 @@ function renderStepContent(step: number, userData: { firstName: string; lastName
       return (
         <div className="space-y-6">
           <div className="space-y-2">
-            <Label htmlFor="cancerType">Type of Cancer</Label>
-            <Input 
-              id="cancerType" 
+            <Label htmlFor="typeOfCancer" className="block text-sm font-medium text-gray-700">
+              Type of Cancer
+            </Label>
+            <select
+              id="typeOfCancer"
+              name="typeOfCancer"
+              required
               value={surveyData.treatmentHistory.cancerType}
-              onChange={(e) => updateSurveyData(2, { cancerType: e.target.value })}
-              placeholder="e.g., Breast, Lung, Colorectal" 
-            />
+              onChange={e => updateSurveyData(2, { cancerType: e.target.value })}
+              className="mt-1 block w-full rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-forest-green focus:outline-none focus:ring-1 focus:ring-forest-green text-gray-900"
+            >
+              <option value="">Select type</option>
+              <option value="Breast">Breast</option>
+              <option value="Lung">Lung</option>
+              <option value="Colorectal">Colorectal</option>
+              <option value="Prostate">Prostate</option>
+              <option value="Skin">Skin</option>
+              <option value="Blood">Blood</option>
+              <option value="Other">Other</option>
+            </select>
           </div>
 
           <div className="space-y-2">
@@ -679,4 +729,48 @@ function CheckboxItem({ id, label, checked, onCheckedChange }: CheckboxItemProps
       <Label htmlFor={id}>{label}</Label>
     </div>
   )
+}
+
+function flattenSurveyData(surveyData: SurveyData) {
+  return {
+    // Personal Info
+    firstName: surveyData.personalInfo.firstName,
+    lastName: surveyData.personalInfo.lastName,
+    email: surveyData.personalInfo.email,
+    dateOfBirth: new Date(surveyData.personalInfo.dob),
+    gender: surveyData.personalInfo.gender,
+
+    // Treatment History
+    typeOfCancer: surveyData.treatmentHistory.cancerType,
+    dateOfDiagnosis: new Date(surveyData.treatmentHistory.diagnosisDate),
+    dateTreatmentEnded: new Date(surveyData.treatmentHistory.treatmentEndDate)  ,
+    treatmentsReceived: surveyData.treatmentHistory.treatments,
+    otherTreatments: surveyData.treatmentHistory.otherTreatments,
+
+    // Physical Health
+    physicalHealth: surveyData.physicalHealth.status, // if you have this field
+    symptoms: surveyData.physicalHealth.currentSymptoms,
+    physicalActivity: surveyData.physicalHealth.activity, // if you have this field
+    physicalConcerns: surveyData.physicalHealth.otherSymptoms,
+
+    // Emotional Wellbeing
+    emotionalWellbeing: surveyData.emotionalWellbeing.mood,
+    emotionalSymptoms: Array.isArray(surveyData.emotionalWellbeing.concerns)
+      ? surveyData.emotionalWellbeing.concerns
+      : surveyData.emotionalWellbeing.concerns
+        ? [surveyData.emotionalWellbeing.concerns]
+        : [],
+    supportSystem: surveyData.emotionalWellbeing.supportSystem,
+    emotionalConcerns: surveyData.emotionalWellbeing.concerns,
+
+    // Lifestyle & Goals
+    diet: surveyData.lifestyleGoals.diet,
+    sleepQuality: surveyData.lifestyleGoals.sleep,
+    recoveryGoals: Array.isArray(surveyData.lifestyleGoals.goals)
+      ? surveyData.lifestyleGoals.goals
+      : surveyData.lifestyleGoals.goals
+        ? [surveyData.lifestyleGoals.goals]
+        : [],
+    additionalInfo: surveyData.lifestyleGoals.additionalInfo, // if you have this field
+  };
 }

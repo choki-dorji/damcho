@@ -21,12 +21,22 @@ import {
 } from "lucide-react"
 import { ChatInterface } from "@/components/chat-interface"
 import { UserNav } from "@/components/user-nav"
-import { getCurrentUser } from "@/lib/auth-actions"
+
 import { useToast } from "@/hooks/use-toast"
 import { sendCarePlanByEmail } from "@/lib/email-actions"
 
+function getCookieValue(name: string) {
+  const cookies = document.cookie.split(';');
+  for (let cookie of cookies) {
+    const [key, value] = cookie.trim().split('=');
+    if (key === name) return decodeURIComponent(value);
+  }
+  return null;
+}
+
+
 export default function DashboardPage() {
-  const [user, setUser] = useState(null)
+  const [user, setUser] = useState<any>(null)
   const [loading, setLoading] = useState(true)
   const [sendingEmail, setSendingEmail] = useState(false)
   const router = useRouter()
@@ -35,13 +45,15 @@ export default function DashboardPage() {
   useEffect(() => {
     async function loadUser() {
       try {
-        const userData = await getCurrentUser()
-        console.log(userData)
+        // const userData = await getCurrentUser()
+        const userData = getCookieValue('userData'); // replace with your cookie name
+
         if (!userData) {
           router.push("/auth/login")
           return
         }
-        setUser(userData)
+        console.log("userData", userData)
+        setUser(JSON.parse(userData))
       } catch (error) {
         console.error("Error loading user:", error)
       } finally {
@@ -51,6 +63,7 @@ export default function DashboardPage() {
 
     loadUser()
   }, [router])
+  console.log("user out", user)
 
   const handleDownloadCarePlan = () => {
     // In a real application, this would generate a PDF and trigger a download
