@@ -41,7 +41,7 @@ export default function LoginPage() {
       })
 
       const data = await response.json()
-
+      console.log("data", data)
       if (!response.ok) {
         throw new Error(data.error || 'Login failed')
       }
@@ -59,7 +59,7 @@ export default function LoginPage() {
       await new Promise(resolve => setTimeout(resolve, 500))
       
       // Redirect based on survey completion and care plan status
-      if (!data.user.hasCompletedSurvey || !data.user.hasCarePlan) {
+      if (!data.user.hasCompletedSurvey) {
         router.push("/survey")
       } else {
         router.push("/dashboard")
@@ -74,7 +74,6 @@ export default function LoginPage() {
       setIsLoading(false)
     }
   }
-
   return (
     <div className="min-h-screen bg-parchment flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-md">

@@ -52,7 +52,6 @@ export default function DashboardPage() {
           router.push("/auth/login")
           return
         }
-        console.log("userData", userData)
         setUser(JSON.parse(userData))
       } catch (error) {
         console.error("Error loading user:", error)
@@ -63,7 +62,7 @@ export default function DashboardPage() {
 
     loadUser()
   }, [router])
-  console.log("user out", user)
+
 
   const handleDownloadCarePlan = () => {
     // In a real application, this would generate a PDF and trigger a download

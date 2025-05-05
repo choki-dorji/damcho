@@ -10,7 +10,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Textarea } from "@/components/ui/textarea"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { UserNav } from "@/components/user-nav"
-import { getCurrentUser } from "@/lib/auth-actions"
 import { useToast } from "@/hooks/use-toast"
 import { User, Mail, Phone, Calendar, MapPin, Shield, Bell, Lock } from "lucide-react"
 
@@ -31,21 +30,30 @@ export default function ProfilePage() {
   const router = useRouter()
   const { toast } = useToast()
 
+  function getCookieValue(name: string) {
+    const cookies = document.cookie.split(';');
+    for (let cookie of cookies) {
+      const [key, value] = cookie.trim().split('=');
+      if (key === name) return decodeURIComponent(value);
+    }
+    return null;
+  }
   useEffect(() => {
     async function loadUser() {
       try {
-        const userData = await getCurrentUser()
+        const userData = getCookieValue('userData')
         if (!userData) {
           router.push("/auth/login")
           return
         }
-        setUser(userData)
+        const user = JSON.parse(userData)
+        setUser(user)
 
         // Initialize profile data with user data
         setProfileData({
-          firstName: userData.firstName || "",
-          lastName: userData.lastName || "",
-          email: userData.email || "",
+          firstName: user.firstName || "",
+          lastName: user.lastName || "",
+          email: user.email || "",
           phone: "555-123-4567", // Mock data
           dateOfBirth: "1975-06-15", // Mock data
           address: "123 Main St, Anytown, USA", // Mock data
@@ -61,7 +69,7 @@ export default function ProfilePage() {
     loadUser()
   }, [router])
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: any) => {
     const { name, value } = e.target
     setProfileData((prev) => ({
       ...prev,

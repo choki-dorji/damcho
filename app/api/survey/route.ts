@@ -9,6 +9,15 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   const data = await request.json();
+
+  // 1. Create the survey
   const survey = await prisma.Survey.create({ data });
+
+  // 2. Mark hasCompletedSurvey as true for the user
+  await prisma.user.update({
+    where: { id: data.userId },
+    data: { hasCompletedSurvey: true }
+  });
+
   return Response.json(survey, { status: 201 });
 } 
