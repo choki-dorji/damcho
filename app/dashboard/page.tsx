@@ -162,7 +162,7 @@ export default function DashboardPage() {
   )
 }
 
-function WelcomeCard({ user, onDownload, onSendEmail, sendingEmail }) {
+function WelcomeCard({ user, onDownload, onSendEmail, sendingEmail }: any) {
   return (
     <Card className="border-none shadow-md bg-gradient-to-r from-dusty-blue/20 to-mist-green/20">
       <CardContent className="pt-6">
@@ -233,7 +233,7 @@ function CarePlanOverview() {
   )
 }
 
-function PriorityCard({ icon, title, description, progress }) {
+function PriorityCard({ icon, title, description, progress }: any) {
   return (
     <Card className="border-none shadow-sm hover:shadow-md transition-shadow">
       <CardHeader className="pb-2">
@@ -252,7 +252,6 @@ function PriorityCard({ icon, title, description, progress }) {
           <Progress
             value={progress}
             className="h-2 bg-gray-200"
-            indicatorClassName={`${progress > 66 ? "bg-mist-green" : progress > 33 ? "bg-dusty-blue" : "bg-forest-green/60"}`}
           />
         </div>
       </CardContent>
@@ -310,7 +309,7 @@ function RecommendationsSection() {
   )
 }
 
-function RecommendationCard({ icon, title, recommendations }) {
+function RecommendationCard({ icon, title, recommendations }: any) {
   return (
     <Card className="border-none shadow-sm hover:shadow-md transition-shadow">
       <CardHeader className="pb-2">
@@ -392,7 +391,7 @@ function ProgressTracking() {
   )
 }
 
-function ProgressItem({ label, startValue, currentValue, targetValue }) {
+function ProgressItem({ label, startValue, currentValue, targetValue } : any) {
   const percentage = Math.round(((currentValue - startValue) / (targetValue - startValue)) * 100)
 
   return (
@@ -418,7 +417,7 @@ function ProgressItem({ label, startValue, currentValue, targetValue }) {
   )
 }
 
-function MilestoneItem({ title, date, status }) {
+function MilestoneItem({ title, date, status }: any) {
   const getStatusStyles = () => {
     switch (status) {
       case "completed":
@@ -541,7 +540,7 @@ function ResourcesSection() {
   )
 }
 
-function ResourceCategory({ title, icon, resources }) {
+function ResourceCategory({ title, icon, resources } : any) {
   return (
     <Card className="border-none shadow-md h-full">
       <CardHeader>
@@ -571,7 +570,7 @@ function ResourceCategory({ title, icon, resources }) {
   )
 }
 
-function EventItem({ title, date, location, description }) {
+function EventItem({ title, date, location, description } : any) {
   return (
     <div className="flex space-x-4">
       <div className="flex-shrink-0 w-12 h-12 bg-white rounded-md shadow-sm flex items-center justify-center">

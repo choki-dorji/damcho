@@ -3,8 +3,10 @@ import { cookies } from 'next/headers'
 
 export async function POST() {
   try {
-    const cookieStore = cookies()
-    cookieStore.delete('user_id')
+    const allCookies = cookies().getAll();
+    for (const cookie of allCookies) {
+      cookies().delete(cookie.name);
+    }
 
     return NextResponse.json(
       { success: true },

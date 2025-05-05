@@ -7,16 +7,18 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { useToast } from "@/hooks/use-toast"
 import { Heart } from "lucide-react"
+import CustomAlert from "@/components/custom-alert";
+
+
 
 export default function LoginPage() {
+  const [alert, setAlert] = useState<null | { type: string; title: string; message: string }>(null);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   })
   const [isLoading, setIsLoading] = useState(false)
-  const { toast } = useToast()
   const router = useRouter()
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -50,9 +52,10 @@ export default function LoginPage() {
         throw new Error('No user data received')
       }
 
-      toast({
+      setAlert({
+        type: "success",
         title: "Login successful",
-        description: "Welcome back!",
+        message: "Welcome back!",
       })
 
       // Wait a moment for the toast to show
@@ -65,10 +68,10 @@ export default function LoginPage() {
         router.push("/dashboard")
       }
     } catch (error) {
-      toast({
+      setAlert({
+        type: "error",
         title: "Login failed",
-        description: error instanceof Error ? error.message : "Invalid email or password",
-        variant: "destructive",
+        message: error instanceof Error ? error.message : "Invalid email or password",
       })
     } finally {
       setIsLoading(false)
@@ -82,12 +85,22 @@ export default function LoginPage() {
             <Heart className="h-8 w-8 text-forest-green" />
           </div>
         </div>
+        
 
         <Card className="border-none shadow-lg">
           <CardHeader className="space-y-1">
             <CardTitle className="text-2xl text-center text-forest-green">Welcome Back</CardTitle>
             <CardDescription className="text-center">Sign in to your account</CardDescription>
           </CardHeader>
+          {alert && (
+        <CustomAlert
+          type={alert.type as any}
+          title={alert.title}
+          message={alert.message}
+          onClose={() => setAlert(null)}
+          duration={3000} // 3 seconds
+        />
+      )}
 
           <form onSubmit={handleSubmit}>
             <CardContent className="space-y-4">

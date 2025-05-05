@@ -2,6 +2,7 @@ import { Inter } from "next/font/google"
 import "./globals.css"
 import { FloatingChat } from "@/components/floating-chat"
 
+
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata = {
@@ -10,7 +11,7 @@ export const metadata = {
     generator: 'v0.dev'
 }
 
-export default function RootLayout({ children }) {
+export default function RootLayout({ children }: any) {
   return (
     <html lang="en">
       <body className={inter.className}>

@@ -19,7 +19,7 @@ export async function handleRegister(data: {
     }
 
     // Set user session
-    const cookieStore = cookies()
+    const cookieStore = await cookies()
     cookieStore.set('user_id', result.user.id, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
@@ -43,7 +43,7 @@ export async function handleLogin(data: { email: string; password: string }) {
     }
 
     // Set user session
-    const cookieStore = cookies()
+    const cookieStore = await cookies()
     cookieStore.set('user_id', result.user.id, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
@@ -59,16 +59,18 @@ export async function handleLogin(data: { email: string; password: string }) {
 }
 
 export async function handleLogout() {
-  const cookieStore = cookies()
-  cookieStore.delete('user_id')
+  const cookieStore = await cookies()
+  cookieStore.delete('userData')
+  cookieStore.delete('session')
   redirect('/auth/login')
+}
+
+export async function setAuthCookies(userData) {
+  const cookieStore = await cookies()
+  cookieStore.set('userData', JSON.stringify(userData), {
+    path: '/',
+    maxAge: 86400,
+    secure: process.env.NODE_ENV === 'production',
+  })
 } 
 
-export function getCookieValue(name: string) {
-  const cookies = document.cookie.split(';');
-  for (let cookie of cookies) {
-    const [key, value] = cookie.trim().split('=');
-    if (key === name) return decodeURIComponent(value);
-  }
-  return null;
-}

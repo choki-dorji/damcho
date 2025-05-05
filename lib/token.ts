@@ -47,7 +47,7 @@ export function setAuthCookies(user: User, token: string) {
   
   // Set session cookie
   document.cookie = `session=${token}; path=/; max-age=86400; secure; samesite=strict`
-  
+  console.log("session cookie", token)
   // Set user data cookie (excluding password)
   const userData = {
     id: user.id,

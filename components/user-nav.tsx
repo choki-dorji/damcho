@@ -23,15 +23,13 @@ export function UserNav({ user }) {
   const router = useRouter()
   const { toast } = useToast()
 
-  console.log("user", user)
-
   const handleLogout = async () => {
     setIsLoggingOut(true)
-
+    
     try {
-      const result = await logoutUser()
-
-      if (result.success) {
+      const result = await fetch("/api/auth/logout", { method: "POST" });
+      const data = await result.json()
+      if (data.success) {
         toast({
           title: "Logged out successfully",
           description: "You have been logged out of your account.",
