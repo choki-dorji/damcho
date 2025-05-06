@@ -3,7 +3,7 @@ import { cookies } from 'next/headers'
 
 export async function POST() {
   try {
-    const allCookies = cookies().getAll();
+    const allCookies = await cookies().getAll();
     for (const cookie of allCookies) {
       cookies().delete(cookie.name);
     }

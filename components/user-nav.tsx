@@ -27,8 +27,7 @@ export function UserNav({ user }: { user: { name: string; email: string } }) {
     
     try {
       const result = await fetch("/api/auth/logout", { method: "POST" });
-      const data = await result.json()
-      if (result.success) {
+      if (result.ok) {
         toast({
           title: "Logged out successfully",
           description: "You have been logged out of your account.",
