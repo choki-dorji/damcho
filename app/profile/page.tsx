@@ -12,6 +12,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { UserNav } from "@/components/user-nav"
 import { useToast } from "@/hooks/use-toast"
 import { User, Mail, Phone, Calendar, MapPin, Shield, Bell, Lock } from "lucide-react"
+import Navigation from "@/components/nav/nav"
 
 export default function ProfilePage() {
   const [user, setUser] = useState(null)
@@ -98,12 +99,7 @@ export default function ProfilePage() {
 
   return (
     <div className="min-h-screen bg-parchment">
-      <header className="bg-white shadow-sm py-4 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center">
-          <h1 className="text-2xl font-bold text-forest-green mb-4 sm:mb-0">Your Profile</h1>
-          <UserNav user={user} />
-        </div>
-      </header>
+      <Navigation user={user} />
 
       <main className="py-8 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">

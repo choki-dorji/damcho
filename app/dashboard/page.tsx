@@ -24,6 +24,7 @@ import { UserNav } from "@/components/user-nav"
 
 import { useToast } from "@/hooks/use-toast"
 import { sendCarePlanByEmail } from "@/lib/email-actions"
+import Navigation from "@/components/nav/nav"
 
 function getCookieValue(name: string) {
   const cookies = document.cookie.split(';');
@@ -64,13 +65,16 @@ export default function DashboardPage() {
   }, [router])
 
 
-  const handleDownloadCarePlan = () => {
-    // In a real application, this would generate a PDF and trigger a download
-    // For this demo, we'll just show a toast notification
-    toast({
-      title: "Care Plan Downloaded",
-      description: "Your personalized care plan has been downloaded successfully.",
-    })
+  const handleDownloadCarePlan = async () => {
+    const res = await fetch("/api/care-plan/download");
+    const text = await res.text();
+    const blob = new Blob([text], { type: "text/plain" });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "care-plan.txt";
+    a.click();
+    window.URL.revokeObjectURL(url);
   }
 
   const handleSendCarePlanByEmail = async () => {
@@ -111,26 +115,16 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-parchment">
-      <header className="bg-white shadow-sm py-4 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center">
-          <h1 className="text-2xl font-bold text-forest-green mb-4 sm:mb-0">Your Care Dashboard</h1>
-          <div className="flex items-center space-x-4">
-            <Button variant="outline" className="border-dusty-blue text-dusty-blue hover:bg-dusty-blue/10">
-              Update Survey
-            </Button>
-            <UserNav user={user} />
-          </div>
-        </div>
-      </header>
+      <Navigation user={user} />
 
       <main className="py-8 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <Tabs defaultValue="care-plan" className="space-y-8">
-            <TabsList className="grid grid-cols-2 md:grid-cols-4 gap-2">
+            <TabsList className="grid grid-cols-2 md:grid-cols-3 gap-2">
               <TabsTrigger value="care-plan">Care Plan</TabsTrigger>
               <TabsTrigger value="progress">Progress</TabsTrigger>
               <TabsTrigger value="resources">Resources</TabsTrigger>
-              <TabsTrigger value="support">Support Chat</TabsTrigger>
+              {/* <TabsTrigger value="support">Support Chat</TabsTrigger> */}
             </TabsList>
 
             <TabsContent value="care-plan" className="space-y-8">
@@ -152,9 +146,9 @@ export default function DashboardPage() {
               <ResourcesSection />
             </TabsContent>
 
-            <TabsContent value="support" className="space-y-8">
+            {/* <TabsContent value="support" className="space-y-8">
               <ChatInterface />
-            </TabsContent>
+            </TabsContent> */}
           </Tabs>
         </div>
       </main>
@@ -168,7 +162,7 @@ function WelcomeCard({ user, onDownload, onSendEmail, sendingEmail }: any) {
       <CardContent className="pt-6">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
           <div>
-            <h2 className="text-2xl font-bold text-forest-green mb-2">Welcome back, {user?.firstName || "User"}</h2>
+            <h2 className="text-2xl font-bold text-forest-green mb-2">Welcome back, {user?.name || "User"}</h2>
             <p className="text-gray-600">Your personalized care plan was last updated on April 20, 2025</p>
           </div>
           <div className="mt-4 md:mt-0 flex flex-col sm:flex-row gap-2">

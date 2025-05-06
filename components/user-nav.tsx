@@ -15,10 +15,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { useToast } from "@/hooks/use-toast"
-import { logoutUser } from "@/lib/auth-actions"
 import { User, Settings, LogOut } from "lucide-react"
 
-export function UserNav({ user }) {
+export function UserNav({ user }: { user: { name: string; email: string } }) {
   const [isLoggingOut, setIsLoggingOut] = useState(false)
   const router = useRouter()
   const { toast } = useToast()
@@ -29,7 +28,7 @@ export function UserNav({ user }) {
     try {
       const result = await fetch("/api/auth/logout", { method: "POST" });
       const data = await result.json()
-      if (data.success) {
+      if (result.success) {
         toast({
           title: "Logged out successfully",
           description: "You have been logged out of your account.",
@@ -97,12 +96,6 @@ export function UserNav({ user }) {
             <Link href="/profile" className="cursor-pointer flex w-full items-center">
               <User className="mr-2 h-4 w-4" />
               <span>Profile</span>
-            </Link>
-          </DropdownMenuItem>
-          <DropdownMenuItem asChild>
-            <Link href="/settings" className="cursor-pointer flex w-full items-center">
-              <Settings className="mr-2 h-4 w-4" />
-              <span>Settings</span>
             </Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
