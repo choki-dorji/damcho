@@ -91,7 +91,7 @@ export default function Home() {
             />
 
             <TestimonialCard
-              quote="The chatbot became my midnight companion when anxiety struck. Having 24/7 support made a world of difference in my emotional recovery."
+              quote="This service has been a game-changer for me. It not only provided me with a personalized care plan but also connected me with a community of survivors."
               author="James L., Prostate Cancer Survivor"
             />
 
