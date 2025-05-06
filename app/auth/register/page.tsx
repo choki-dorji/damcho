@@ -116,7 +116,7 @@ export default function RegisterPage() {
                   <Input
                     id="firstName"
                     name="firstName"
-                    placeholder="John"
+                    placeholder="Enter your first name"
                     value={formData.firstName}
                     onChange={handleChange}
                     required
@@ -128,7 +128,7 @@ export default function RegisterPage() {
                   <Input
                     id="lastName"
                     name="lastName"
-                    placeholder="Doe"
+                    placeholder="Enter your last name"
                     value={formData.lastName}
                     onChange={handleChange}
                     required
