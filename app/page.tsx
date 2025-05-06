@@ -13,6 +13,13 @@ export default function Home() {
             <h1 className="text-4xl md:text-5xl font-bold text-forest-green mb-6">
               AI-Powered Cancer Survivorship Care
             </h1>
+            <div className="flex justify-center mb-8">
+              <img 
+                src="/logo.png" 
+                alt="Logo" 
+                className="w-[200px] h-[200px] object-contain"
+              />
+            </div>
             <p className="text-xl md:text-2xl text-gray-700 max-w-3xl mx-auto mb-8">
               Personalized support for your journey beyond cancer treatment
             </p>
@@ -54,23 +61,14 @@ export default function Home() {
               description="Receive customized recommendations for managing your post-treatment recovery, including lifestyle adjustments and follow-up care."
             />
 
-            <FeatureCard
-              icon={<MessageSquare className="h-10 w-10 text-dusty-blue" />}
-              title="Supportive AI Chatbot"
-              description="Access our interactive chatbot for immediate emotional support and answers to your questions, available 24/7."
-            />
-
+           
             <FeatureCard
               icon={<Shield className="h-10 w-10 text-forest-green" />}
               title="Privacy & Security"
               description="Your data is protected with enterprise-grade security measures and full compliance with healthcare regulations."
             />
 
-            <FeatureCard
-              icon={<Heart className="h-10 w-10 text-mist-green" />}
-              title="Resource Connection"
-              description="Connect with support groups, educational resources, and healthcare providers tailored to your specific needs."
-            />
+           
 
             <FeatureCard
               icon={<ClipboardList className="h-10 w-10 text-dusty-blue" />}

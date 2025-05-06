@@ -10,8 +10,10 @@ import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { useToast } from "@/hooks/use-toast"
 import { Heart } from "lucide-react"
+import CustomAlert from "@/components/custom-alert"
 
 export default function RegisterPage() {
+  const [alert, setAlert] = useState<null | { type: string; title: string; message: string }>(null);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -33,10 +35,10 @@ export default function RegisterPage() {
     e.preventDefault()
 
     if (formData.password !== formData.confirmPassword) {
-      toast({
-        title: "Passwords don't match",
-        description: "Please make sure your passwords match.",
-        variant: "destructive",
+      setAlert({
+        title: "Password mismatch",
+        type: "error",
+        message: "Passwords do not match. Please try again.",
       })
       return
     }
@@ -64,16 +66,17 @@ export default function RegisterPage() {
         throw new Error(data.error || 'Registration failed')
       }
 
-      toast({
+      setAlert({
         title: "Registration successful",
-        description: "Your account has been created. You can now sign in.",
+        type: "success",
+        message: "Your account has been created. You can now sign in.",
       })
       router.push("/auth/login")
     } catch (error) {
-      toast({
+      setAlert({
         title: "Registration failed",
-        description: error instanceof Error ? error.message : "An error occurred during registration.",
-        variant: "destructive",
+        message: error instanceof Error ? error.message : "An error occurred during registration.",
+        type: "error",
       })
     } finally {
       setIsLoading(false)
@@ -93,8 +96,18 @@ export default function RegisterPage() {
           <CardHeader className="space-y-1">
             <CardTitle className="text-2xl text-center text-forest-green">Create an Account</CardTitle>
             <CardDescription className="text-center">Join the Cancer Survivorship Care platform</CardDescription>
+            {alert && (
+                    <CustomAlert
+                      type={alert.type as any}
+                      title={alert.title}
+                      message={alert.message}
+                      onClose={() => setAlert(null)}
+                      duration={3000} // 3 seconds
+                    />
+            )}
+            
           </CardHeader>
-
+          
           <form onSubmit={handleSubmit}>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-2 gap-4">

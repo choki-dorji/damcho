@@ -43,7 +43,6 @@ export default function LoginPage() {
       })
 
       const data = await response.json()
-      console.log("data", data)
       if (!response.ok) {
         throw new Error(data.error || 'Login failed')
       }
@@ -58,10 +57,7 @@ export default function LoginPage() {
         message: "Welcome back!",
       })
 
-      // Wait a moment for the toast to show
-      await new Promise(resolve => setTimeout(resolve, 500))
-      
-      // Redirect based on survey completion and care plan status
+      // Redirect immediately based on survey completion and care plan status
       if (!data.user.hasCompletedSurvey) {
         router.push("/survey")
       } else {
@@ -73,36 +69,34 @@ export default function LoginPage() {
         title: "Login failed",
         message: error instanceof Error ? error.message : "Invalid email or password",
       })
-    } finally {
       setIsLoading(false)
     }
   }
   return (
-    <div className="min-h-screen bg-parchment flex items-center justify-center px-4 py-12">
-      <div className="w-full max-w-md">
-        <div className="flex justify-center mb-6">
-          <div className="bg-white p-3 rounded-full shadow-md">
-            <Heart className="h-8 w-8 text-forest-green" />
-          </div>
+    <div className="min-h-screen bg-parchment flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full space-y-8">
+        <div className="text-center">
+          <img src="/logo.png" alt="logo" className="mx-auto h-20 w-20" />
+          <h2 className="mt-6 text-3xl font-bold text-forest-green">Welcome Back</h2>
+          <p className="mt-2 text-sm text-gray-600">Sign in to access your care plan</p>
         </div>
-        
 
-        <Card className="border-none shadow-lg">
-          <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl text-center text-forest-green">Welcome Back</CardTitle>
-            <CardDescription className="text-center">Sign in to your account</CardDescription>
-          </CardHeader>
-          {alert && (
-        <CustomAlert
-          type={alert.type as any}
-          title={alert.title}
-          message={alert.message}
-          onClose={() => setAlert(null)}
-          duration={3000} // 3 seconds
-        />
-      )}
+        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+          <Card className="border-none shadow-lg">
+            <CardHeader className="space-y-1">
+              <CardTitle className="text-2xl text-center text-forest-green">Welcome Back</CardTitle>
+              <CardDescription className="text-center">Sign in to your account</CardDescription>
+            </CardHeader>
+            {alert && (
+              <CustomAlert
+                type={alert.type as any}
+                title={alert.title}
+                message={alert.message}
+                onClose={() => setAlert(null)}
+                duration={3000}
+              />
+            )}
 
-          <form onSubmit={handleSubmit}>
             <CardContent className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
@@ -132,8 +126,12 @@ export default function LoginPage() {
             </CardContent>
 
             <CardFooter className="flex flex-col space-y-4">
-              <Button type="submit" className="w-full bg-forest-green hover:bg-forest-green/90" disabled={isLoading}>
-                {isLoading ? "Signing in..." : "Sign In"}
+              <Button 
+                type="submit" 
+                className="w-full bg-forest-green hover:bg-forest-green/90" 
+                disabled={isLoading}
+              >
+                {isLoading ? "Logging in..." : "Sign In"}
               </Button>
 
               <div className="text-center text-sm">
@@ -143,8 +141,8 @@ export default function LoginPage() {
                 </Link>
               </div>
             </CardFooter>
-          </form>
-        </Card>
+          </Card>
+        </form>
       </div>
     </div>
   )

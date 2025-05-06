@@ -38,17 +38,13 @@ function getCookieValue(name: string) {
 
 export default function DashboardPage() {
   const [user, setUser] = useState<any>(null)
-  const [loading, setLoading] = useState(true)
-  const [sendingEmail, setSendingEmail] = useState(false)
   const router = useRouter()
   const { toast } = useToast()
 
   useEffect(() => {
     async function loadUser() {
       try {
-        // const userData = await getCurrentUser()
-        const userData = getCookieValue('userData'); // replace with your cookie name
-
+        const userData = getCookieValue('userData');
         if (!userData) {
           router.push("/auth/login")
           return
@@ -56,14 +52,15 @@ export default function DashboardPage() {
         setUser(JSON.parse(userData))
       } catch (error) {
         console.error("Error loading user:", error)
-      } finally {
-        setLoading(false)
       }
     }
 
     loadUser()
   }, [router])
 
+  if (!user) {
+    return null
+  }
 
   const handleDownloadCarePlan = async () => {
     const res = await fetch("/api/care-plan/download");
@@ -78,7 +75,6 @@ export default function DashboardPage() {
   }
 
   const handleSendCarePlanByEmail = async () => {
-    setSendingEmail(true)
     try {
       const result = await sendCarePlanByEmail({ userId: user.id, email: user.email })
 
@@ -100,17 +96,7 @@ export default function DashboardPage() {
         description: "Please try again later.",
         variant: "destructive",
       })
-    } finally {
-      setSendingEmail(false)
     }
-  }
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-parchment flex items-center justify-center">
-        <div className="text-forest-green">Loading...</div>
-      </div>
-    )
   }
 
   return (
@@ -120,11 +106,9 @@ export default function DashboardPage() {
       <main className="py-8 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <Tabs defaultValue="care-plan" className="space-y-8">
-            <TabsList className="grid grid-cols-2 md:grid-cols-3 gap-2">
+            <TabsList className="grid grid-cols-2 gap-2">
               <TabsTrigger value="care-plan">Care Plan</TabsTrigger>
               <TabsTrigger value="progress">Progress</TabsTrigger>
-              <TabsTrigger value="resources">Resources</TabsTrigger>
-              {/* <TabsTrigger value="support">Support Chat</TabsTrigger> */}
             </TabsList>
 
             <TabsContent value="care-plan" className="space-y-8">
@@ -132,7 +116,6 @@ export default function DashboardPage() {
                 user={user}
                 onDownload={handleDownloadCarePlan}
                 onSendEmail={handleSendCarePlanByEmail}
-                sendingEmail={sendingEmail}
               />
               <CarePlanOverview />
               <RecommendationsSection />
@@ -141,14 +124,6 @@ export default function DashboardPage() {
             <TabsContent value="progress" className="space-y-8">
               <ProgressTracking />
             </TabsContent>
-
-            <TabsContent value="resources" className="space-y-8">
-              <ResourcesSection />
-            </TabsContent>
-
-            {/* <TabsContent value="support" className="space-y-8">
-              <ChatInterface />
-            </TabsContent> */}
           </Tabs>
         </div>
       </main>
@@ -156,7 +131,7 @@ export default function DashboardPage() {
   )
 }
 
-function WelcomeCard({ user, onDownload, onSendEmail, sendingEmail }: any) {
+function WelcomeCard({ user, onDownload, onSendEmail }: any) {
   return (
     <Card className="border-none shadow-md bg-gradient-to-r from-dusty-blue/20 to-mist-green/20">
       <CardContent className="pt-6">
@@ -177,10 +152,9 @@ function WelcomeCard({ user, onDownload, onSendEmail, sendingEmail }: any) {
               variant="outline"
               className="border-dusty-blue text-dusty-blue hover:bg-dusty-blue/10 flex items-center"
               onClick={onSendEmail}
-              disabled={sendingEmail}
             >
               <Mail className="mr-2 h-4 w-4" />
-              {sendingEmail ? "Sending..." : "Email Care Plan"}
+              Email Care Plan
             </Button>
           </div>
         </div>
@@ -458,130 +432,5 @@ function MilestoneItem({ title, date, status }: any) {
         <p className="text-sm text-gray-500">{date}</p>
       </div>
     </li>
-  )
-}
-
-function ResourcesSection() {
-  return (
-    <div className="space-y-6">
-      <h2 className="text-xl font-bold text-forest-green">Recommended Resources</h2>
-
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <ResourceCategory
-          title="Educational Materials"
-          icon={<FileText className="h-6 w-6 text-dusty-blue" />}
-          resources={[
-            { title: "Understanding Life After Cancer Treatment", type: "Guide" },
-            { title: "Nutrition for Cancer Survivors", type: "E-book" },
-            { title: "Managing Long-term Side Effects", type: "Video Series" },
-            { title: "Exercise Guidelines for Recovery", type: "PDF Guide" },
-          ]}
-        />
-
-        <ResourceCategory
-          title="Support Groups"
-          icon={<Users className="h-6 w-6 text-mist-green" />}
-          resources={[
-            { title: "Local Survivor Support Group", type: "In-person" },
-            { title: "Online Peer Support Community", type: "Virtual" },
-            { title: "Family Support Network", type: "Virtual" },
-            { title: "Young Adult Survivors Group", type: "Hybrid" },
-          ]}
-        />
-
-        <ResourceCategory
-          title="Professional Services"
-          icon={<Heart className="h-6 w-6 text-forest-green" />}
-          resources={[
-            { title: "Oncology Nutritionist Consultation", type: "Service" },
-            { title: "Cancer Rehabilitation Specialist", type: "Provider" },
-            { title: "Mental Health Counseling", type: "Service" },
-            { title: "Financial Assistance Programs", type: "Resource" },
-          ]}
-        />
-      </div>
-
-      <Card className="border-none shadow-md bg-gradient-to-r from-dusty-blue/10 to-mist-green/10">
-        <CardHeader>
-          <CardTitle className="text-lg text-forest-green">Upcoming Events</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            <EventItem
-              title="Cancer Survivorship Workshop"
-              date="May 10, 2025"
-              location="Virtual Event"
-              description="Learn strategies for managing post-treatment life from experts and fellow survivors."
-            />
-
-            <EventItem
-              title="Nutrition & Wellness Seminar"
-              date="May 18, 2025"
-              location="Community Center"
-              description="Join our nutritionist for practical tips on healthy eating during recovery."
-            />
-
-            <EventItem
-              title="Mindfulness Meditation Series"
-              date="Starting May 5, 2025"
-              location="Virtual Event"
-              description="A 6-week guided meditation series designed specifically for cancer survivors."
-            />
-          </div>
-        </CardContent>
-      </Card>
-    </div>
-  )
-}
-
-function ResourceCategory({ title, icon, resources } : any) {
-  return (
-    <Card className="border-none shadow-md h-full">
-      <CardHeader>
-        <div className="flex items-center space-x-2">
-          {icon}
-          <CardTitle className="text-lg text-forest-green">{title}</CardTitle>
-        </div>
-      </CardHeader>
-      <CardContent>
-        <ul className="space-y-3">
-          {resources.map((resource, index) => (
-            <li key={index} className="border-b border-gray-100 last:border-0 pb-2 last:pb-0">
-              <div className="flex justify-between">
-                <span className="text-gray-700">{resource.title}</span>
-                <span className="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full">{resource.type}</span>
-              </div>
-            </li>
-          ))}
-        </ul>
-      </CardContent>
-      <CardFooter>
-        <Button variant="link" className="text-dusty-blue p-0 h-auto">
-          View all resources <ChevronRight className="ml-1 h-4 w-4" />
-        </Button>
-      </CardFooter>
-    </Card>
-  )
-}
-
-function EventItem({ title, date, location, description } : any) {
-  return (
-    <div className="flex space-x-4">
-      <div className="flex-shrink-0 w-12 h-12 bg-white rounded-md shadow-sm flex items-center justify-center">
-        <Calendar className="h-6 w-6 text-dusty-blue" />
-      </div>
-      <div>
-        <h3 className="font-medium text-gray-800">{title}</h3>
-        <div className="flex items-center text-sm text-gray-500 mt-1">
-          <Calendar className="h-4 w-4 mr-1" />
-          <span className="mr-3">{date}</span>
-          <span>{location}</span>
-        </div>
-        <p className="text-sm text-gray-600 mt-1">{description}</p>
-        <Button variant="link" className="text-dusty-blue p-0 h-auto mt-1 text-sm">
-          Learn more
-        </Button>
-      </div>
-    </div>
   )
 }

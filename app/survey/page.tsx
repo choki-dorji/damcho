@@ -126,7 +126,6 @@ export default function SurveyPage() {
   }, [router])
 
   const userId = getAuthData()?.id
-  console.log(userId)
   const handleNext = async () => {
     if (currentStep < totalSteps) {
       setCurrentStep(currentStep + 1)
@@ -566,7 +565,12 @@ function renderStepContent(step: number, userData: { firstName: string; lastName
 
           <div className="space-y-2">
             <Label htmlFor="physicalConcerns">Any specific physical concerns?</Label>
-            <Textarea id="physicalConcerns" placeholder="Describe any physical concerns you'd like help with" />
+            <Textarea 
+              id="physicalConcerns" 
+              placeholder="Describe any physical concerns you'd like help with"
+              value={surveyData.physicalHealth.otherSymptoms}
+              onChange={(e) => updateSurveyData(3, { otherSymptoms: e.target.value })}
+            />
           </div>
         </div>
       )
@@ -630,7 +634,12 @@ function renderStepContent(step: number, userData: { firstName: string; lastName
 
           <div className="space-y-2">
             <Label htmlFor="emotionalConcerns">Any specific emotional concerns?</Label>
-            <Textarea id="emotionalConcerns" placeholder="Describe any emotional concerns you'd like help with" />
+            <Textarea 
+              id="emotionalConcerns" 
+              placeholder="Describe any emotional concerns you'd like help with"
+              value={surveyData.emotionalWellbeing.concerns}
+              onChange={(e) => updateSurveyData(4, { concerns: e.target.value })}
+            />
           </div>
         </div>
       )
@@ -701,6 +710,8 @@ function renderStepContent(step: number, userData: { firstName: string; lastName
             <Textarea
               id="additionalInfo"
               placeholder="Any additional information that might help us create your personalized care plan"
+              value={surveyData.lifestyleGoals.goals}
+              onChange={(e) => updateSurveyData(5, { goals: e.target.value })}
             />
           </div>
         </div>
@@ -771,6 +782,6 @@ function flattenSurveyData(surveyData: SurveyData) {
       : surveyData.lifestyleGoals.goals
         ? [surveyData.lifestyleGoals.goals]
         : [],
-    additionalInfo: surveyData.lifestyleGoals.additionalInfo, // if you have this field
+    additionalInfo: surveyData.lifestyleGoals.goals,
   };
 }
