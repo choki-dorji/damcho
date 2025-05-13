@@ -1,0 +1,6 @@
+This is shared to ensure that other teammates when they clone this git reposiotry they should folllow these following steps:
+
+1. after cloning, since there might be changes run command  | git pull | assuming its ins main branch.
+2. after pulling , run the command | npm install | this command it necessary to install all the packages that was in packahe.json
+3. if all the above steps were successfukl then run the command | npm run dev | this will start the server in localhost:3000
+4. open the browser and navigate to localhoat:3000 you will see the server running and see the webservice.
