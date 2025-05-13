@@ -412,11 +412,7 @@ function renderStepContent(step: number, userData: { firstName: string; lastName
               <option value="">Select type</option>
               <option value="Breast">Breast</option>
               <option value="Lung">Lung</option>
-              <option value="Colorectal">Colorectal</option>
-              <option value="Prostate">Prostate</option>
               <option value="Skin">Skin</option>
-              <option value="Blood">Blood</option>
-              <option value="Other">Other</option>
             </select>
           </div>
 

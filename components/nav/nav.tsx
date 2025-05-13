@@ -13,7 +13,7 @@ export default function Navigation(props: any) {
 
           <div className="flex items-center space-x-4">
             <Button variant="outline" className="border-dusty-blue text-dusty-blue hover:bg-dusty-blue/10">
-              Update Survey
+              Manage Care Plan
             </Button>
             <UserNav user={props.user} />
           </div>
