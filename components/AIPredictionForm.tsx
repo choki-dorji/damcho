@@ -408,7 +408,9 @@ export function AIPredictionForm() {
           </CardHeader>
           <CardContent>
             <form onSubmit={step === steps.length - 1 ? handleSubmit : (e) => { e.preventDefault(); handleNext(); }} className="space-y-8">
-              <StepContent />
+              <div key={step}>
+                <StepContent />
+              </div>
               <div className="flex justify-between mt-6">
                 {step > 0 && (
                   <Button type="button" variant="outline" onClick={handleBack}>

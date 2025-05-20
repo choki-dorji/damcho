@@ -54,14 +54,14 @@ export default function Home() {
       </section>
 
       {/* AI Prediction Section */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white">
+      {/* <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white">
         <div className="max-w-7xl mx-auto">
           <h2 className="text-3xl font-bold text-center text-forest-green mb-12">
             Get Your Personalized Care Plan
           </h2>
           <AIPredictionForm />
         </div>
-      </section>
+      </section> */}
 
       {/* Features Section */}
       <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white">
@@ -71,32 +71,53 @@ export default function Home() {
           </h2>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <FeatureCard
-              icon={<ClipboardList className="h-10 w-10 text-dusty-blue" />}
-              title="Comprehensive Health Survey"
-              description="Share your treatment history, physical activity, emotional health, and lifestyle factors to receive personalized care recommendations."
-            />
+            <Link href="/conprehensive" className="block hover:scale-105 transition-transform cursor-pointer">
+              <FeatureCard
+                icon={<ClipboardList className="h-10 w-10 text-dusty-blue" />}
+                title="Comprehensive Health Survey"
+                description="Share your treatment history, physical activity, emotional health, and lifestyle factors to receive personalized care recommendations."
+              />
+            </Link>
 
-            <FeatureCard
-              icon={<Heart className="h-10 w-10 text-mist-green" />}
-              title="AI-Generated Care Plans"
-              description="Receive customized recommendations for managing your post-treatment recovery, including lifestyle adjustments and follow-up care."
-            />
+            <Link href="/care-plan" className="block hover:scale-105 transition-transform cursor-pointer">
+              <FeatureCard
+                icon={<Heart className="h-10 w-10 text-mist-green" />}
+                title="AI-Generated Care Plans"
+                description="Receive customized recommendations for managing your post-treatment recovery, including lifestyle adjustments and follow-up care."
+              />
+            </Link>
 
-           
-            <FeatureCard
-              icon={<Shield className="h-10 w-10 text-forest-green" />}
-              title="Privacy & Security"
-              description="Your data is protected with enterprise-grade security measures and full compliance with healthcare regulations."
-            />
+            <Link href="/chatbot" className="block hover:scale-105 transition-transform cursor-pointer">
+              <FeatureCard
+                icon={<MessageSquare className="h-10 w-10 text-dusty-blue" />}
+                title="Supportive AI Chatbot"
+                description="Access our interactive chatbot for immediate emotional support and answers to your questions, available 24/7."
+              />
+            </Link>
 
-           
+            <Link href="/privacy" className="block hover:scale-105 transition-transform cursor-pointer">
+              <FeatureCard
+                icon={<Shield className="h-10 w-10 text-forest-green" />}
+                title="Privacy & Security"
+                description="Your data is protected with enterprise-grade security measures and full compliance with healthcare regulations."
+              />
+            </Link>
 
-            <FeatureCard
-              icon={<ClipboardList className="h-10 w-10 text-dusty-blue" />}
-              title="Progress Tracking"
-              description="Monitor your recovery journey with easy-to-understand visualizations and milestone tracking."
-            />
+            <Link href="/resources" className="block hover:scale-105 transition-transform cursor-pointer">
+              <FeatureCard
+                icon={<Heart className="h-10 w-10 text-mist-green" />}
+                title="Resource Connection"
+                description="Connect with support groups, educational resources, and healthcare providers tailored to your specific needs."
+              />
+            </Link>
+
+            <Link href="/progress" className="block hover:scale-105 transition-transform cursor-pointer">
+              <FeatureCard
+                icon={<ClipboardList className="h-10 w-10 text-dusty-blue" />}
+                title="Progress Tracking"
+                description="Monitor your recovery journey with easy-to-understand visualizations and milestone tracking."
+              />
+            </Link>
           </div>
         </div>
       </section>
