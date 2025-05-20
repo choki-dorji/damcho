@@ -69,7 +69,7 @@ export function AIPredictionForm() {
       if (!response.ok) throw new Error(result.error || 'Failed to get prediction');
       setPrediction(result);
       // Navigate to dashboard after successful prediction
-      router.push('/dashboard');
+      // router.push('/dashboard');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
