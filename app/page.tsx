@@ -2,6 +2,18 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { ChevronRight, Heart, Shield, MessageSquare, ClipboardList } from "lucide-react"
+import { AIPredictionForm } from "@/components/AIPredictionForm"
+
+interface FeatureCardProps {
+  icon: React.ReactNode;
+  title: string;
+  description: string;
+}
+
+interface TestimonialCardProps {
+  quote: string;
+  author: string;
+}
 
 export default function Home() {
   return (
@@ -38,6 +50,16 @@ export default function Home() {
               </Button>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* AI Prediction Section */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white">
+        <div className="max-w-7xl mx-auto">
+          <h2 className="text-3xl font-bold text-center text-forest-green mb-12">
+            Get Your Personalized Care Plan
+          </h2>
+          <AIPredictionForm />
         </div>
       </section>
 
@@ -121,7 +143,7 @@ export default function Home() {
   )
 }
 
-function FeatureCard({ icon, title, description }) {
+function FeatureCard({ icon, title, description }: FeatureCardProps) {
   return (
     <Card className="border-none shadow-md hover:shadow-lg transition-shadow">
       <CardHeader>
@@ -135,7 +157,7 @@ function FeatureCard({ icon, title, description }) {
   )
 }
 
-function TestimonialCard({ quote, author }) {
+function TestimonialCard({ quote, author }: TestimonialCardProps) {
   return (
     <Card className="border-none shadow-md bg-white">
       <CardContent className="pt-6">

@@ -75,15 +75,12 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-parchment flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
-        <div className="text-center">
-          <img src="/logo.png" alt="logo" className="mx-auto h-20 w-20" />
-          <h2 className="mt-6 text-3xl font-bold text-forest-green">Welcome Back</h2>
-          <p className="mt-2 text-sm text-gray-600">Sign in to access your care plan</p>
-        </div>
+      
 
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <Card className="border-none shadow-lg">
             <CardHeader className="space-y-1">
+              <img src="/logo.png" alt="logo" className="mx-auto h-20 w-20" />
               <CardTitle className="text-2xl text-center text-forest-green">Welcome Back</CardTitle>
               <CardDescription className="text-center">Sign in to your account</CardDescription>
             </CardHeader>
