@@ -54,14 +54,14 @@ export default function Home() {
       </section>
 
       {/* AI Prediction Section */}
-      {/* <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white">
+      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white">
         <div className="max-w-7xl mx-auto">
           <h2 className="text-3xl font-bold text-center text-forest-green mb-12">
             Get Your Personalized Care Plan
           </h2>
           <AIPredictionForm />
         </div>
-      </section> */}
+      </section>
 
       {/* Features Section */}
       <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white">
@@ -71,7 +71,7 @@ export default function Home() {
           </h2>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <Link href="/conprehensive" className="block hover:scale-105 transition-transform cursor-pointer">
+            <Link href="/survey" className="block hover:scale-105 transition-transform cursor-pointer">
               <FeatureCard
                 icon={<ClipboardList className="h-10 w-10 text-dusty-blue" />}
                 title="Comprehensive Health Survey"
